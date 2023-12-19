@@ -99,4 +99,4 @@ function Course({ course }: { course: ScheduleCourse }) {
   );
 }
 
-export { Plan };
+export { Plan, Course };

@@ -1,12 +1,26 @@
-import { Plan } from "@/components/Plan";
-import { DndContext, closestCorners } from "@dnd-kit/core";
+import { Course, Plan } from "@/components/Plan";
+import { usePlanStore } from "@/stores/planStore";
+import {
+  DndContext,
+  DragOverlay,
+  DragStartEvent,
+  closestCorners,
+} from "@dnd-kit/core";
 
 function App() {
-  const handleDragStart = () => {};
+  const [activeCourse, setActiveCourse] = usePlanStore(
+    ({ activeCourse, setActiveCourse }) => [activeCourse, setActiveCourse],
+  );
+
+  const handleDragStart = ({ active }: DragStartEvent) => {
+    setActiveCourse(active.id as string);
+  };
 
   const handleDragOver = () => {};
 
-  const handleDragEnd = () => {};
+  const handleDragEnd = () => {
+    setActiveCourse(null);
+  };
 
   return (
     <DndContext
@@ -16,6 +30,9 @@ function App() {
       onDragEnd={handleDragEnd}
     >
       <Plan />
+      <DragOverlay>
+        {activeCourse && <Course course={activeCourse} />}
+      </DragOverlay>
     </DndContext>
   );
 }
