@@ -1,26 +1,28 @@
-export type SchedulePlan = {
-  years: ScheduleYear[];
+export type Plan = {
+  catalogYear: number;
+  major: string;
+  concentration: string;
+  schedule: ScheduleYear[];
 };
 
-export type ScheduleYear = {
-  fall: ScheduleTerm<TermSeason.FALL>;
-  spring: ScheduleTerm<TermSeason.SPRING>;
-} & (
-  | {
-      isSummerFull: false;
-      summer1: ScheduleTerm<TermSeason.SUMMER_1>;
-      summer2: ScheduleTerm<TermSeason.SUMMER_2>;
-    }
-  | {
-      isSummerFull: true;
-      summerFull: ScheduleTerm<TermSeason.SUMMER_FULL>;
-    }
-);
+export type ScheduleYear =
+  | [
+      ScheduleTerm<TermSeason.FALL>,
+      ScheduleTerm<TermSeason.SPRING>,
+      ScheduleTerm<TermSeason.SUMMER_1>,
+      ScheduleTerm<TermSeason.SUMMER_2>,
+    ]
+  | [
+      ScheduleTerm<TermSeason.FALL>,
+      ScheduleTerm<TermSeason.SPRING>,
+      ScheduleTerm<TermSeason.SUMMER_FULL>,
+    ];
 
 export type ScheduleTerm<T extends TermSeason> = {
-  classes: ScheduleCourse[];
+  courses: ScheduleCourse[];
   status: TermStatus;
   season: T;
+  dndId: string;
 };
 
 export enum TermStatus {
@@ -30,17 +32,18 @@ export enum TermStatus {
 }
 
 export enum TermSeason {
-  FALL = "fall",
-  SPRING = "spring",
-  SUMMER_1 = "summer1",
-  SUMMER_2 = "summer2",
-  SUMMER_FULL = "summer_full",
+  FALL = "FL",
+  SPRING = "SP",
+  SUMMER_1 = "S1",
+  SUMMER_2 = "S2",
+  SUMMER_FULL = "SF",
 }
 
 export type ScheduleCourse = {
   name: string;
-  classId: number;
+  courseId: number;
   subject: string;
   numCreditsMin: number;
-  numCreditMax: number;
+  numCreditsMax: number;
+  dndId: string;
 };
