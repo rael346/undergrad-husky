@@ -1,8 +1,7 @@
-import { Plan, ScheduleYear, TermSeason, TermStatus } from "@/types";
+import { Plan, Year, TermSeason, TermStatus } from "@/types";
 
-const YEAR_1: ScheduleYear = [
+const YEAR_1: Year = [
   {
-    dndId: "year-1-FL",
     status: TermStatus.CLASSES,
     season: TermSeason.FALL,
     courses: [
@@ -10,38 +9,25 @@ const YEAR_1: ScheduleYear = [
         name: "First Year Seminar",
         subject: "CS",
         courseId: 1200,
-        numCreditsMax: 1,
-        numCreditsMin: 1,
-        dndId: "cs-1200",
       },
       {
         name: "Fundamentals of Computer Science 1",
         subject: "CS",
         courseId: 2500,
-        numCreditsMax: 4,
-        numCreditsMin: 4,
-        dndId: "cs-2500",
       },
       {
         name: "Discrete Structures",
         subject: "CS",
         courseId: 1800,
-        numCreditsMax: 4,
-        numCreditsMin: 4,
-        dndId: "cs-1800",
       },
       {
         name: "Lab for CS 2500",
         subject: "CS",
         courseId: 2501,
-        numCreditsMax: 1,
-        numCreditsMin: 1,
-        dndId: "cs-2501",
       },
     ],
   },
   {
-    dndId: "year-1-SP",
     status: TermStatus.CLASSES,
     season: TermSeason.SPRING,
     courses: [
@@ -49,30 +35,20 @@ const YEAR_1: ScheduleYear = [
         name: "Fundamentals of Computer Science 2",
         subject: "CS",
         courseId: 2510,
-        numCreditsMax: 4,
-        numCreditsMin: 4,
-        dndId: "cs-2510",
       },
       {
         name: "Mathematics of Data Models",
         subject: "CS",
         courseId: 2810,
-        numCreditsMax: 4,
-        numCreditsMin: 4,
-        dndId: "cs-2810",
       },
       {
         name: "Lab for CS 2510",
         subject: "CS",
         courseId: 2511,
-        numCreditsMax: 1,
-        numCreditsMin: 1,
-        dndId: "cs-2511",
       },
     ],
   },
   {
-    dndId: "year-1-S1",
     status: TermStatus.CLASSES,
     season: TermSeason.SUMMER_1,
     courses: [
@@ -80,22 +56,15 @@ const YEAR_1: ScheduleYear = [
         name: "Object-Oriented Design",
         subject: "CS",
         courseId: 3500,
-        numCreditsMax: 4,
-        numCreditsMin: 4,
-        dndId: "cs-3500",
       },
       {
         name: "Lab for CS 3500",
         subject: "CS",
         courseId: 3501,
-        numCreditsMax: 1,
-        numCreditsMin: 1,
-        dndId: "cs-3501",
       },
     ],
   },
   {
-    dndId: "year-1-S2",
     status: TermStatus.CLASSES,
     season: TermSeason.SUMMER_2,
     courses: [
@@ -103,25 +72,18 @@ const YEAR_1: ScheduleYear = [
         name: "Algorithms and Data",
         subject: "CS",
         courseId: 3000,
-        numCreditsMax: 4,
-        numCreditsMin: 4,
-        dndId: "cs-3000",
       },
       {
         name: "Recitation for CS 3000",
         courseId: 3001,
         subject: "CS",
-        numCreditsMin: 0,
-        numCreditsMax: 0,
-        dndId: "cs-3001",
       },
     ],
   },
 ];
 
-const YEAR_2: ScheduleYear = [
+const YEAR_2: Year = [
   {
-    dndId: "year-2-FL",
     status: TermStatus.CLASSES,
     season: TermSeason.FALL,
     courses: [
@@ -129,22 +91,15 @@ const YEAR_2: ScheduleYear = [
         name: "Artificial Intelligence",
         subject: "CS",
         courseId: 4100,
-        numCreditsMax: 4,
-        numCreditsMin: 4,
-        dndId: "cs-4100",
       },
       {
         name: "Probability and Statistics",
         subject: "MATH",
         courseId: 3081,
-        numCreditsMax: 4,
-        numCreditsMin: 4,
-        dndId: "math-3081",
       },
     ],
   },
   {
-    dndId: "year-2-SP",
     status: TermStatus.CLASSES,
     season: TermSeason.SPRING,
     courses: [
@@ -152,14 +107,10 @@ const YEAR_2: ScheduleYear = [
         name: "Co-op Education",
         courseId: -1,
         subject: "Experiential Learning",
-        numCreditsMax: 8,
-        numCreditsMin: 0,
-        dndId: "experiential-learning-0",
       },
     ],
   },
   {
-    dndId: "year-2-S1",
     status: TermStatus.CLASSES,
     season: TermSeason.SUMMER_1,
     courses: [
@@ -167,14 +118,10 @@ const YEAR_2: ScheduleYear = [
         name: "Co-op Education",
         courseId: -1,
         subject: "Experiential Learning",
-        numCreditsMax: 8,
-        numCreditsMin: 0,
-        dndId: "experiential-learning-1",
       },
     ],
   },
   {
-    dndId: "year-2-S2",
     status: TermStatus.CLASSES,
     season: TermSeason.SUMMER_2,
     courses: [
@@ -182,9 +129,6 @@ const YEAR_2: ScheduleYear = [
         name: "Foundations of Cybersecurity",
         subject: "CY",
         courseId: 2550,
-        numCreditsMax: 4,
-        numCreditsMin: 4,
-        dndId: "cy-2550",
       },
     ],
   },

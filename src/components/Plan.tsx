@@ -6,9 +6,12 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { usePlanStore } from "@/stores/planStore";
-import { ScheduleCourse, ScheduleTerm, TermSeason } from "@/types";
-import { useDroppable } from "@dnd-kit/core";
-import { SortableContext, useSortable } from "@dnd-kit/sortable";
+import { Course, DndCourse, DndTerm, TermSeason } from "@/types";
+import {
+  SortableContext,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
 function Plan() {
@@ -39,7 +42,7 @@ function Plan() {
 function Term({
   term,
 }: {
-  term: ScheduleTerm<
+  term: DndTerm<
     | TermSeason.FALL
     | TermSeason.SPRING
     | TermSeason.SUMMER_1
@@ -55,17 +58,16 @@ function Term({
     [TermSeason.SUMMER_FULL]: "SUMMER FULL",
   };
 
-  const { setNodeRef } = useDroppable({
-    id: term.dndId,
-  });
-
   return (
-    <div className="px-2 py-2 flex flex-col space-y-2" ref={setNodeRef}>
+    <div className="px-2 py-2 flex flex-col space-y-2">
       <div className="font-semibold">{seasonMap[term.season]}</div>
       <div className="flex flex-col space-y-2">
-        <SortableContext items={term.courses.map(course => course.dndId)}>
+        <SortableContext
+          items={term.courses.map(course => course.dndId)}
+          strategy={verticalListSortingStrategy}
+        >
           {term.courses.map(course => (
-            <SortableCourse course={course} />
+            <SortableCourse course={course} key={course.dndId} />
           ))}
         </SortableContext>
       </div>
@@ -73,7 +75,7 @@ function Term({
   );
 }
 
-function SortableCourse({ course }: { course: ScheduleCourse }) {
+function SortableCourse({ course }: { course: DndCourse }) {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: course.dndId });
 
@@ -90,9 +92,20 @@ function SortableCourse({ course }: { course: ScheduleCourse }) {
   );
 }
 
-function Course({ course }: { course: ScheduleCourse }) {
+function Course({
+  course,
+  isOverlay = false,
+}: {
+  course: Course;
+  isOverlay?: boolean;
+}) {
   return (
-    <Button variant={"outline"} className="flex flex-row space-x-1 bg-white">
+    <Button
+      variant={"outline"}
+      className={`w-full flex flex-row space-x-1 bg-white hover:scale-105 transition-transform ${
+        isOverlay && "opacity-40"
+      }`}
+    >
       <span className="font-semibold">{course.subject + course.courseId}</span>
       <span>{course.name}</span>
     </Button>

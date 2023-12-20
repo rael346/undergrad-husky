@@ -1,28 +1,63 @@
+export type DndPlan = {
+  catalogYear: number;
+  major: string;
+  concentration: string;
+  schedule: DndYear[];
+};
+
+export type DndYear = DndRegularYear | DndSummerFullYear;
+
+export type DndRegularYear = [
+  DndTerm<TermSeason.FALL>,
+  DndTerm<TermSeason.SPRING>,
+  DndTerm<TermSeason.SUMMER_1>,
+  DndTerm<TermSeason.SUMMER_2>,
+];
+
+export type DndSummerFullYear = [
+  DndTerm<TermSeason.FALL>,
+  DndTerm<TermSeason.SPRING>,
+  DndTerm<TermSeason.SUMMER_FULL>,
+];
+
+export type DndTerm<T extends TermSeason> = Dnd<{
+  courses: DndCourse[];
+  status: TermStatus;
+  season: T;
+}>;
+
+export type DndCourse = Dnd<Course>;
+
+export type Dnd<T> = T & {
+  dndId: string;
+};
+
 export type Plan = {
   catalogYear: number;
   major: string;
   concentration: string;
-  schedule: ScheduleYear[];
+  schedule: Year[];
 };
 
-export type ScheduleYear =
-  | [
-      ScheduleTerm<TermSeason.FALL>,
-      ScheduleTerm<TermSeason.SPRING>,
-      ScheduleTerm<TermSeason.SUMMER_1>,
-      ScheduleTerm<TermSeason.SUMMER_2>,
-    ]
-  | [
-      ScheduleTerm<TermSeason.FALL>,
-      ScheduleTerm<TermSeason.SPRING>,
-      ScheduleTerm<TermSeason.SUMMER_FULL>,
-    ];
+export type Year = RegularYear | SummerFullYear;
 
-export type ScheduleTerm<T extends TermSeason> = {
-  courses: ScheduleCourse[];
+export type RegularYear = [
+  Term<TermSeason.FALL>,
+  Term<TermSeason.SPRING>,
+  Term<TermSeason.SUMMER_1>,
+  Term<TermSeason.SUMMER_2>,
+];
+
+export type SummerFullYear = [
+  Term<TermSeason.FALL>,
+  Term<TermSeason.SPRING>,
+  Term<TermSeason.SUMMER_FULL>,
+];
+
+export type Term<T extends TermSeason> = {
+  courses: Course[];
   status: TermStatus;
   season: T;
-  dndId: string;
 };
 
 export enum TermStatus {
@@ -32,18 +67,28 @@ export enum TermStatus {
 }
 
 export enum TermSeason {
-  FALL = "FL",
-  SPRING = "SP",
-  SUMMER_1 = "S1",
-  SUMMER_2 = "S2",
-  SUMMER_FULL = "SF",
+  FALL = "fl",
+  SPRING = "sp",
+  SUMMER_1 = "s1",
+  SUMMER_2 = "s2",
+  SUMMER_FULL = "sf",
 }
 
-export type ScheduleCourse = {
+export const TERM_SEASON_INDEX_MAP = {
+  [TermSeason.FALL]: 0,
+  [TermSeason.SPRING]: 1,
+  [TermSeason.SUMMER_1]: 2,
+  [TermSeason.SUMMER_2]: 3,
+  [TermSeason.SUMMER_FULL]: 2,
+};
+
+export type Course = {
   name: string;
   courseId: number;
   subject: string;
+};
+
+export type CourseMetaData = {
   numCreditsMin: number;
   numCreditsMax: number;
-  dndId: string;
 };
