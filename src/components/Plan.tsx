@@ -1,3 +1,4 @@
+import { DraggableDots } from "@/components/icons";
 import {
   Accordion,
   AccordionContent,
@@ -59,7 +60,7 @@ function Term({
   };
 
   return (
-    <div className="px-2 py-2 flex flex-col space-y-2">
+    <div className="px-2 py-2 flex flex-col space-y-2 min-h-52">
       <div className="font-semibold">{seasonMap[term.season]}</div>
       <div className="flex flex-col space-y-2">
         <SortableContext
@@ -100,15 +101,19 @@ function Course({
   isOverlay?: boolean;
 }) {
   return (
-    <Button
-      variant={"outline"}
-      className={`w-full flex flex-row space-x-1 bg-white hover:scale-105 transition-transform ${
+    <div
+      className={`w-full px-2 py-1 rounded-md border border-solid shadow-sm flex flex-row justify-start items-center space-x-2 bg-white hover:scale-105 transition-transform ${
         isOverlay && "opacity-40"
       }`}
     >
-      <span className="font-semibold">{course.subject + course.courseId}</span>
-      <span className="text-wrap">{course.name}</span>
-    </Button>
+      <DraggableDots />
+      <div className="flex flex-col justify-start">
+        <div className="text-xs text-slate-600">
+          {course.subject + course.courseId}
+        </div>
+        <div className="text-wrap">{course.name}</div>
+      </div>
+    </div>
   );
 }
 
