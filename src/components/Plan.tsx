@@ -5,9 +5,15 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Button } from "@/components/ui/button";
 import { usePlanStore } from "@/stores/planStore";
-import { Course, DndCourse, DndTerm, TermSeason } from "@/types";
+import {
+  Course,
+  DndCourse,
+  DndTerm,
+  DISPLAY_SEASON,
+  TermSeason,
+} from "@/types";
+import { useDroppable } from "@dnd-kit/core";
 import {
   SortableContext,
   useSortable,
@@ -51,34 +57,55 @@ function Term({
     | TermSeason.SUMMER_FULL
   >;
 }) {
-  const seasonMap = {
-    [TermSeason.FALL]: "FALL",
-    [TermSeason.SPRING]: "SPRING",
-    [TermSeason.SUMMER_1]: "SUMMER 1",
-    [TermSeason.SUMMER_2]: "SUMMER 2",
-    [TermSeason.SUMMER_FULL]: "SUMMER FULL",
-  };
-
   return (
-    <div className="px-2 py-2 flex flex-col space-y-2 min-h-52">
-      <div className="font-semibold">{seasonMap[term.season]}</div>
-      <div className="flex flex-col space-y-2">
-        <SortableContext
-          items={term.courses.map(course => course.dndId)}
-          strategy={verticalListSortingStrategy}
-        >
-          {term.courses.map(course => (
-            <SortableCourse course={course} key={course.dndId} />
-          ))}
-        </SortableContext>
+    <DroppableContainer id={term.dndId}>
+      <div className="px-2 py-2 flex flex-col space-y-2 min-h-52">
+        <div className="font-semibold">{DISPLAY_SEASON[term.season]}</div>
+        <div className="flex flex-col space-y-2">
+          <SortableContext
+            items={term.courses.map(course => course.dndId)}
+            strategy={verticalListSortingStrategy}
+          >
+            {term.courses.map(course => (
+              <SortableCourse course={course} key={course.dndId} />
+            ))}
+          </SortableContext>
+        </div>
       </div>
-    </div>
+    </DroppableContainer>
   );
 }
 
+type ContainerProps = {
+  children: React.ReactNode;
+  id: string;
+};
+
+function DroppableContainer({ children, id }: ContainerProps) {
+  const { setNodeRef } = useDroppable({
+    id,
+    data: {
+      type: "term",
+    },
+  });
+
+  return <div ref={setNodeRef}>{children}</div>;
+}
+
 function SortableCourse({ course }: { course: DndCourse }) {
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id: course.dndId });
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
+    id: course.dndId,
+    data: {
+      type: "course",
+    },
+  });
 
   // https://github.com/clauderic/dnd-kit/issues/926
   const style = {
@@ -88,7 +115,7 @@ function SortableCourse({ course }: { course: DndCourse }) {
 
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      <Course course={course} />
+      <Course course={course} isDragging={isDragging} />
     </div>
   );
 }
@@ -96,15 +123,17 @@ function SortableCourse({ course }: { course: DndCourse }) {
 function Course({
   course,
   isOverlay = false,
+  isDragging = false,
 }: {
   course: Course;
   isOverlay?: boolean;
+  isDragging?: boolean;
 }) {
   return (
     <div
       className={`w-full px-2 py-1 rounded-md border border-solid shadow-sm flex flex-row justify-start items-center space-x-2 bg-white hover:scale-105 transition-transform ${
         isOverlay && "opacity-40"
-      }`}
+      } ${isDragging && "scale-105"}`}
     >
       <DraggableDots />
       <div className="flex flex-col justify-start">

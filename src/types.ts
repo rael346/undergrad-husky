@@ -82,6 +82,14 @@ export const TERM_SEASON_INDEX_MAP = {
   [TermSeason.SUMMER_FULL]: 2,
 };
 
+export const DISPLAY_SEASON = {
+  [TermSeason.FALL]: "FALL",
+  [TermSeason.SPRING]: "SPRING",
+  [TermSeason.SUMMER_1]: "SUMMER 1",
+  [TermSeason.SUMMER_2]: "SUMMER 2",
+  [TermSeason.SUMMER_FULL]: "SUMMER FULL",
+};
+
 export type Course = {
   name: string;
   courseId: number;
