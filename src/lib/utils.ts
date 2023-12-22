@@ -1,4 +1,10 @@
-import { DndPlan, DndYear, Plan, TermSeason } from "@/types";
+import {
+  DndPlan,
+  DndYear,
+  Plan,
+  TERM_SEASON_INDEX_MAP,
+  TermSeason,
+} from "@/types";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -16,7 +22,7 @@ export function preparePlanForDnd(plan: Plan): DndPlan {
         name: course.name,
         courseId: course.courseId,
         subject: course.subject,
-        dndId: `${index}-${term.season}-${course.subject + course.courseId}`,
+        dndId: `${course.subject + course.courseId}`,
       })),
     }));
   }) as unknown;
@@ -32,31 +38,44 @@ export function preparePlanForDnd(plan: Plan): DndPlan {
 type ParsedDndIdTerm = {
   type: "term";
   yearIndex: number;
-  termSeason: TermSeason;
+  termIndex: number;
 };
 
 type ParsedDndIdCourse = {
   type: "course";
   yearIndex: number;
-  termSeason: TermSeason;
-  courseCode: string;
+  termIndex: number;
+  courseIndex: number;
 };
 
-export function parseDndId(dndId: string): ParsedDndIdTerm | ParsedDndIdCourse {
-  const result = dndId.split("-");
-
-  if (result.length === 2) {
+export function parseDndId(
+  dndId: string,
+  schedule: DndYear[],
+): ParsedDndIdTerm | ParsedDndIdCourse {
+  if (dndId.includes("-")) {
+    const result = dndId.split("-");
     return {
       type: "term",
       yearIndex: parseInt(result[0]),
-      termSeason: result[1] as TermSeason,
+      termIndex: TERM_SEASON_INDEX_MAP[result[1] as TermSeason],
     };
   }
 
+  const term = schedule
+    .flat()
+    .find(term => term.courses.some(course => course.dndId === dndId));
+
+  // TODO: remove casting later
+  const termIndex = TERM_SEASON_INDEX_MAP[term!.season];
+  const [yearIndex] = term?.dndId.split("-") as [string, string];
+  const courseIndex = term?.courses.findIndex(
+    course => course.dndId === dndId,
+  ) as number;
+
   return {
     type: "course",
-    yearIndex: parseInt(result[0]),
-    termSeason: result[1] as TermSeason,
-    courseCode: result[2],
+    yearIndex: parseInt(yearIndex),
+    termIndex,
+    courseIndex,
   };
 }

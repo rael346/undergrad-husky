@@ -14,35 +14,43 @@ function App() {
     ({ activeCourse, setActiveCourse }) => [activeCourse, setActiveCourse],
   );
 
-  const moveCourse = usePlanStore(state => state.moveCourse);
+  const moveCourseToSameTerm = usePlanStore(
+    state => state.moveCourseToSameTerm,
+  );
+
+  const moveCourseToDifferentTerm = usePlanStore(
+    state => state.moveCourseToDifferentTerm,
+  );
 
   const handleDragStart = ({ active }: DragStartEvent) => {
     setActiveCourse(active.id as string);
   };
 
   const handleDragOver = ({ active, over }: DragOverEvent) => {
-    console.log("DragOver", active.id, over?.id);
+    if (!over) {
+      return;
+    }
+
+    moveCourseToDifferentTerm(active, over);
   };
 
   const handleDragEnd = ({ active, over }: DragEndEvent) => {
-    moveCourse(active.id as string, over?.id as string | undefined);
+    moveCourseToSameTerm(active.id as string, over?.id as string);
     setActiveCourse(null);
   };
 
   return (
-    <div>
-      <DndContext
-        collisionDetection={closestCorners}
-        onDragStart={handleDragStart}
-        onDragOver={handleDragOver}
-        onDragEnd={handleDragEnd}
-      >
-        <Plan />
-        <DragOverlay>
-          {activeCourse && <Course course={activeCourse} isOverlay />}
-        </DragOverlay>
-      </DndContext>
-    </div>
+    <DndContext
+      collisionDetection={closestCorners}
+      onDragStart={handleDragStart}
+      onDragOver={handleDragOver}
+      onDragEnd={handleDragEnd}
+    >
+      <Plan />
+      <DragOverlay>
+        {activeCourse && <Course course={activeCourse} isOverlay />}
+      </DragOverlay>
+    </DndContext>
   );
 }
 

@@ -107,7 +107,7 @@ function Course({
       }`}
     >
       <span className="font-semibold">{course.subject + course.courseId}</span>
-      <span>{course.name}</span>
+      <span className="text-wrap">{course.name}</span>
     </Button>
   );
 }
