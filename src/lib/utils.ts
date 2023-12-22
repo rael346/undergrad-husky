@@ -13,17 +13,33 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function preparePlanForDnd(plan: Plan): DndPlan {
+  const courseCount = new Map<string, number>();
+
   const dndSchedule = plan.schedule.map((year, index) => {
     return year.map(term => ({
       dndId: `${index}-${term.season}`,
       season: term.season,
       status: term.status,
-      courses: term.courses.map(course => ({
-        name: course.name,
-        courseId: course.courseId,
-        subject: course.subject,
-        dndId: `${course.subject + course.courseId}`,
-      })),
+      courses: term.courses.map(course => {
+        const courseCode = `${course.subject + course.courseId}`;
+        const newCount = courseCount.has(courseCode)
+          ? courseCount.get(courseCode)! + 1
+          : 1;
+
+        courseCount.set(courseCode, newCount);
+
+        const dndId =
+          newCount > 1 ? `${courseCode}-${newCount}` : `${courseCode}`;
+
+        console.log();
+
+        return {
+          name: course.name,
+          courseId: course.courseId,
+          subject: course.subject,
+          dndId,
+        };
+      }),
     }));
   }) as unknown;
 
@@ -52,7 +68,14 @@ export function parseDndId(
   dndId: string,
   schedule: DndYear[],
 ): ParsedDndIdTerm | ParsedDndIdCourse {
-  if (dndId.includes("-")) {
+  const isTerm =
+    dndId.includes(TermSeason.FALL) ||
+    dndId.includes(TermSeason.SPRING) ||
+    dndId.includes(TermSeason.SUMMER_1) ||
+    dndId.includes(TermSeason.SUMMER_2) ||
+    dndId.includes(TermSeason.SUMMER_FULL);
+
+  if (isTerm) {
     const result = dndId.split("-");
     return {
       type: "term",

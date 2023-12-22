@@ -104,9 +104,9 @@ const YEAR_2: Year = [
     season: TermSeason.SPRING,
     courses: [
       {
-        name: "Co-op Education",
-        courseId: -1,
-        subject: "Experiential Learning",
+        name: "Experiential Learning",
+        courseId: 3945,
+        subject: "COOP",
       },
     ],
   },
@@ -115,9 +115,9 @@ const YEAR_2: Year = [
     season: TermSeason.SUMMER_1,
     courses: [
       {
-        name: "Co-op Education",
-        courseId: -1,
-        subject: "Experiential Learning",
+        name: "Experiential Learning",
+        courseId: 3945,
+        subject: "COOP",
       },
     ],
   },
