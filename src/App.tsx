@@ -1,4 +1,5 @@
-import { Course, Plan } from "@/components/Plan";
+import { Course } from "@/components/Course";
+import { Plan } from "@/components/Plan";
 import { usePlanStore } from "@/stores/planStore";
 import {
   DndContext,
