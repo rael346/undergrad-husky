@@ -1,4 +1,5 @@
 import { DraggableDots } from "@/components/icons";
+import { cn } from "@/lib/utils";
 import { Course, DndCourse } from "@/types";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
@@ -42,9 +43,13 @@ function Course({
 }) {
   return (
     <div
-      className={`w-full px-2 py-1 rounded-md border border-solid shadow-sm flex flex-row justify-start items-center space-x-2 bg-white hover:scale-105 transition-transform ${
-        isOverlay && "opacity-40"
-      } ${isDragging && "scale-105"}`}
+      className={cn(
+        "w-full px-2 py-1 rounded-md border border-solid shadow-sm",
+        "flex flex-row justify-start items-center space-x-2",
+        "bg-white hover:scale-105 transition-transform",
+        isDragging && "opacity-50 scale-105",
+        isOverlay && "shadow-lg",
+      )}
     >
       <DraggableDots />
       <div className="flex flex-col justify-start">
