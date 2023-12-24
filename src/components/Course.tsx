@@ -16,6 +16,7 @@ function SortableCourse({ course }: { course: DndCourse }) {
     id: course.dndId,
     data: {
       type: "course",
+      dndId: course.dndId,
     },
   });
 
@@ -46,9 +47,9 @@ function Course({
       className={cn(
         "w-full px-2 py-1 rounded-md border border-solid shadow-sm",
         "flex flex-row justify-start items-center space-x-2",
-        "bg-white hover:scale-105 transition-transform",
-        isDragging && "opacity-50 scale-105",
-        isOverlay && "shadow-lg",
+        "bg-white hover:scale-105 transition-transform cursor-pointer",
+        isDragging && "opacity-50",
+        isOverlay && "shadow-lg scale-105",
       )}
     >
       <DraggableDots />
@@ -56,7 +57,7 @@ function Course({
         <div className="text-xs text-slate-600">
           {course.subject + course.courseId}
         </div>
-        <div className="text-wrap">{course.name}</div>
+        <div className="text-wrap text-sm">{course.name}</div>
       </div>
     </div>
   );
