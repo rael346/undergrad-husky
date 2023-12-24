@@ -1,6 +1,6 @@
 import { TEST_PLAN } from "@/constants";
-import { parseDndId, preparePlanForDnd } from "@/lib/utils";
-import { DndCourse, DndPlan } from "@/types";
+import { preparePlanForDnd } from "@/lib/utils";
+import { DndCourse, DndPlan, DndYear } from "@/types";
 import { Active, Over } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
 import { create } from "zustand";
@@ -8,7 +8,7 @@ import { immer } from "zustand/middleware/immer";
 
 type Actions = {
   setActiveCourse: (dndId: string | null) => void;
-  moveCourseToSameTerm: (activeDndId: string, overDndId: string) => void;
+  moveCourseToSameTerm: (active: Active, over: Over) => void;
   moveCourseToDifferentTerm: (active: Active, over: Over) => void;
 };
 
@@ -18,7 +18,7 @@ type State = DndPlan & {
 
 const initialState: DndPlan = preparePlanForDnd(TEST_PLAN);
 
-const usePlanStore = create<State & Actions>()(
+export const usePlanStore = create<State & Actions>()(
   immer((set, get) => ({
     ...initialState,
 
@@ -29,97 +29,158 @@ const usePlanStore = create<State & Actions>()(
         return;
       }
 
-      const parsedDndId = parseDndId(dndId, get().schedule);
+      const activeIndexes = getCourseIndex(dndId, get().schedule);
 
-      // this case shouldn't be possible
-      if (parsedDndId.type === "term") {
-        return;
-      }
-
-      const { yearIndex, termIndex, courseIndex } = parsedDndId;
       const activeCourse =
-        get().schedule[yearIndex][termIndex].courses[courseIndex];
+        get().schedule[activeIndexes.yearIndex][activeIndexes.termIndex]
+          .courses[activeIndexes.courseIndex];
 
       set({ activeCourse });
     },
 
-    moveCourseToSameTerm(activeDndId, overDndId) {
+    moveCourseToSameTerm(active, over) {
+      const activeData = active.data.current as DndData | undefined;
+      const overData = over.data.current as DndData | undefined;
+
+      if (!activeData || !overData) {
+        return;
+      }
+
+      if (activeData.type !== "course" || overData.type !== "course") {
+        return;
+      }
+
       const schedule = get().schedule;
-      const active = parseDndId(activeDndId, schedule);
-      const over = parseDndId(overDndId, schedule);
+      const activeCourse = getCourseIndex(activeData.dndId, schedule);
+      const overCourse = getCourseIndex(overData.dndId, schedule);
 
       if (
-        active.yearIndex !== over.yearIndex ||
-        active.termIndex !== over.termIndex
+        // courses in different year/term
+        activeCourse.yearIndex !== overCourse.yearIndex ||
+        activeCourse.termIndex !== overCourse.termIndex ||
+        // active course didn't change position
+        activeCourse.courseIndex === overCourse.courseIndex
       ) {
         return;
       }
 
-      // for now only course is draggable, and therefore active
-      if (active.type === "term" || over.type === "term") {
-        return;
-      }
-
-      if (active.courseIndex === over.courseIndex) {
-        return;
-      }
-
-      const termCourses = schedule[active.yearIndex][active.termIndex].courses;
+      const termCourses =
+        schedule[activeCourse.yearIndex][activeCourse.termIndex].courses;
 
       set(plan => {
-        plan.schedule[active.yearIndex][active.termIndex].courses = arrayMove(
-          termCourses,
-          active.courseIndex,
-          over.courseIndex,
-        );
+        plan.schedule[activeCourse.yearIndex][activeCourse.termIndex].courses =
+          arrayMove(
+            termCourses,
+            activeCourse.courseIndex,
+            overCourse.courseIndex,
+          );
       });
     },
 
     moveCourseToDifferentTerm(active, over) {
-      const schedule = get().schedule;
-      const parsedActiveDndId = parseDndId(active.id as string, schedule);
-      const parsedOverDndId = parseDndId(over.id as string, schedule);
+      const activeData = active.data.current as DndData | undefined;
+      const overData = over.data.current as DndData | undefined;
 
-      if (
-        parsedActiveDndId.yearIndex === parsedOverDndId.yearIndex &&
-        parsedActiveDndId.termIndex === parsedOverDndId.termIndex
-      ) {
+      if (!activeData || !overData) {
         return;
       }
 
-      if (parsedActiveDndId.type === "term") {
+      if (activeData.type !== "course") {
+        return;
+      }
+
+      if (overData.type !== "course" && overData.type !== "term") {
         return;
       }
 
       let newIndex: number;
+      let overYearIndex: number;
+      let overTermIndex: number;
+      const schedule = get().schedule;
 
-      if (parsedOverDndId.type === "term") {
+      if (overData.type === "term") {
         newIndex = 1;
-      } else {
+        const overTerm = getTermIndex(overData.dndId, schedule);
+        overYearIndex = overTerm.yearIndex;
+        overTermIndex = overTerm.termIndex;
+      }
+
+      if (overData.type === "course") {
+        const overCourse = getCourseIndex(overData.dndId, schedule);
         const isBelowOverItem =
-          over &&
           active.rect.current.translated &&
           active.rect.current.translated.top > over.rect.top + over.rect.height;
 
         const modifier = isBelowOverItem ? 1 : 0;
-        newIndex = parsedOverDndId.courseIndex + modifier;
+        newIndex = overCourse.courseIndex + modifier;
+        overYearIndex = overCourse.yearIndex;
+        overTermIndex = overCourse.termIndex;
       }
 
+      const activeIndexes = getCourseIndex(activeData.dndId, schedule);
       const activeCourse =
-        schedule[parsedActiveDndId.yearIndex][parsedActiveDndId.termIndex]
-          .courses[parsedActiveDndId.courseIndex];
+        schedule[activeIndexes.yearIndex][activeIndexes.termIndex].courses[
+          activeIndexes.courseIndex
+        ];
 
       set(plan => {
-        plan.schedule[parsedActiveDndId.yearIndex][
-          parsedActiveDndId.termIndex
-        ].courses.splice(parsedActiveDndId.courseIndex, 1);
+        plan.schedule[activeIndexes.yearIndex][
+          activeIndexes.termIndex
+        ].courses.splice(activeIndexes.courseIndex, 1);
 
-        plan.schedule[parsedOverDndId.yearIndex][
-          parsedOverDndId.termIndex
-        ].courses.splice(newIndex, 0, activeCourse);
+        plan.schedule[overYearIndex][overTermIndex].courses.splice(
+          newIndex,
+          0,
+          activeCourse,
+        );
       });
     },
   })),
 );
 
-export { usePlanStore };
+function getTermIndex(termDndId: string, schedule: DndYear[]) {
+  const yearIndex = schedule.findIndex(year =>
+    year.some(term => term.dndId === termDndId),
+  );
+  const termIndex = schedule[yearIndex].findIndex(
+    term => term.dndId === termDndId,
+  );
+
+  return {
+    yearIndex,
+    termIndex,
+  };
+}
+
+function getCourseIndex(courseDndId: string, schedule: DndYear[]) {
+  const yearIndex = schedule.findIndex(year =>
+    year.some(term =>
+      term.courses.some(course => course.dndId === courseDndId),
+    ),
+  );
+  const termIndex = schedule[yearIndex].findIndex(term =>
+    term.courses.some(course => course.dndId === courseDndId),
+  );
+
+  const courseIndex = schedule[yearIndex][termIndex].courses.findIndex(
+    course => course.dndId === courseDndId,
+  );
+
+  return {
+    yearIndex,
+    termIndex,
+    courseIndex,
+  };
+}
+
+type DndData = DndCourseData | DndTermData;
+
+type DndCourseData = {
+  type: "course";
+  dndId: string;
+};
+
+type DndTermData = {
+  type: "term";
+  dndId: string;
+};

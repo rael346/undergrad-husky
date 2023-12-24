@@ -18,7 +18,7 @@ function Term({
   >;
 }) {
   return (
-    <DroppableContainer id={term.dndId}>
+    <DroppableContainer dndId={term.dndId}>
       <div className="px-2 py-2 flex flex-col space-y-2">
         <div className="font-semibold">{DISPLAY_SEASON[term.season]}</div>
         <div className="flex flex-col space-y-2">
@@ -38,14 +38,15 @@ function Term({
 
 type ContainerProps = {
   children: React.ReactNode;
-  id: string;
+  dndId: string;
 };
 
-function DroppableContainer({ children, id }: ContainerProps) {
+function DroppableContainer({ children, dndId }: ContainerProps) {
   const { setNodeRef } = useDroppable({
-    id,
+    id: dndId,
     data: {
       type: "term",
+      dndId,
     },
   });
 

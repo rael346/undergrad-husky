@@ -36,7 +36,11 @@ function App() {
   };
 
   const handleDragEnd = ({ active, over }: DragEndEvent) => {
-    moveCourseToSameTerm(active.id as string, over?.id as string);
+    if (!over) {
+      return;
+    }
+
+    moveCourseToSameTerm(active, over);
     setActiveCourse(null);
   };
 
