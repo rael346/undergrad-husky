@@ -1,6 +1,6 @@
 import { Course } from "@/components/Course";
 import { Plan } from "@/components/Plan";
-import { usePlanStore } from "@/stores/planStore";
+import { DndData, usePlanStore } from "@/stores/planStore";
 import {
   DndContext,
   DragEndEvent,
@@ -11,7 +11,7 @@ import {
 } from "@dnd-kit/core";
 
 function App() {
-  const setActiveCourse = usePlanStore(state => state.setActiveCourse);
+  const setActive = usePlanStore(state => state.setActive);
 
   const moveCourseToSameTerm = usePlanStore(
     state => state.moveCourseToSameTerm,
@@ -22,7 +22,7 @@ function App() {
   );
 
   const handleDragStart = ({ active }: DragStartEvent) => {
-    setActiveCourse(active.id as string);
+    setActive(active.data.current as DndData);
   };
 
   const handleDragOver = ({ active, over }: DragOverEvent) => {
@@ -39,7 +39,7 @@ function App() {
     }
 
     moveCourseToSameTerm(active, over);
-    setActiveCourse(null);
+    setActive(null);
   };
 
   return (
@@ -56,7 +56,7 @@ function App() {
 }
 
 function Overlay() {
-  const activeCourse = usePlanStore(state => state.activeCourse);
+  const activeCourse = usePlanStore(state => state.active);
 
   return (
     <DragOverlay>

@@ -1,19 +1,19 @@
 import { TEST_PLAN } from "@/constants";
 import { preparePlanForDnd } from "@/lib/utils";
-import { DndCourse, DndPlan, DndYear } from "@/types";
+import { DndCourse, DndPlan } from "@/types";
 import { Active, Over } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
 type Actions = {
-  setActiveCourse: (dndId: string | null) => void;
+  setActive: (activeData: DndData | null) => void;
   moveCourseToSameTerm: (active: Active, over: Over) => void;
   moveCourseToDifferentTerm: (active: Active, over: Over) => void;
 };
 
 type State = DndPlan & {
-  activeCourse: DndCourse | null;
+  active: DndCourse | null;
 };
 
 const initialState: DndPlan = preparePlanForDnd(TEST_PLAN);
@@ -22,20 +22,20 @@ export const usePlanStore = create<State & Actions>()(
   immer((set, get) => ({
     ...initialState,
 
-    activeCourse: null,
-    setActiveCourse(dndId) {
-      if (dndId === null) {
-        set({ activeCourse: null });
+    active: null,
+    setActive(activeData) {
+      if (activeData === null) {
+        set({ active: null });
         return;
       }
 
-      const activeIndexes = getCourseIndex(dndId, get().schedule);
+      if (activeData.type === "course") {
+        const activeCourse =
+          get().schedule[activeData.yearIndex].terms[activeData.termIndex]
+            .courses[activeData.courseIndex];
 
-      const activeCourse =
-        get().schedule[activeIndexes.yearIndex].terms[activeIndexes.termIndex]
-          .courses[activeIndexes.courseIndex];
-
-      set({ activeCourse });
+        set({ active: activeCourse });
+      }
     },
 
     moveCourseToSameTerm(active, over) {
@@ -51,29 +51,27 @@ export const usePlanStore = create<State & Actions>()(
       }
 
       const schedule = get().schedule;
-      const activeCourse = getCourseIndex(activeData.dndId, schedule);
-      const overCourse = getCourseIndex(overData.dndId, schedule);
 
       if (
         // courses in different year/term
-        activeCourse.yearIndex !== overCourse.yearIndex ||
-        activeCourse.termIndex !== overCourse.termIndex ||
+        activeData.yearIndex !== overData.yearIndex ||
+        activeData.termIndex !== overData.termIndex ||
         // active course didn't change position
-        activeCourse.courseIndex === overCourse.courseIndex
+        activeData.courseIndex === overData.courseIndex
       ) {
         return;
       }
 
       const termCourses =
-        schedule[activeCourse.yearIndex].terms[activeCourse.termIndex].courses;
+        schedule[activeData.yearIndex].terms[activeData.termIndex].courses;
 
       set(plan => {
-        plan.schedule[activeCourse.yearIndex].terms[
-          activeCourse.termIndex
+        plan.schedule[activeData.yearIndex].terms[
+          activeData.termIndex
         ].courses = arrayMove(
           termCourses,
-          activeCourse.courseIndex,
-          overCourse.courseIndex,
+          activeData.courseIndex,
+          overData.courseIndex,
         );
       });
     },
@@ -101,32 +99,30 @@ export const usePlanStore = create<State & Actions>()(
 
       if (overData.type === "term") {
         newIndex = 1;
-        const overTerm = getTermIndex(overData.dndId, schedule);
-        overYearIndex = overTerm.yearIndex;
-        overTermIndex = overTerm.termIndex;
+        overYearIndex = overData.yearIndex;
+        overTermIndex = overData.termIndex;
       }
 
       if (overData.type === "course") {
-        const overCourse = getCourseIndex(overData.dndId, schedule);
         const isBelowOverItem =
           active.rect.current.translated &&
           active.rect.current.translated.top > over.rect.top + over.rect.height;
 
         const modifier = isBelowOverItem ? 1 : 0;
-        newIndex = overCourse.courseIndex + modifier;
-        overYearIndex = overCourse.yearIndex;
-        overTermIndex = overCourse.termIndex;
+        newIndex = overData.courseIndex + modifier;
+        overYearIndex = overData.yearIndex;
+        overTermIndex = overData.termIndex;
       }
 
-      const activeIndexes = getCourseIndex(activeData.dndId, schedule);
       const activeCourse =
-        schedule[activeIndexes.yearIndex].terms[activeIndexes.termIndex]
-          .courses[activeIndexes.courseIndex];
+        schedule[activeData.yearIndex].terms[activeData.termIndex].courses[
+          activeData.courseIndex
+        ];
 
       set(plan => {
-        plan.schedule[activeIndexes.yearIndex].terms[
-          activeIndexes.termIndex
-        ].courses.splice(activeIndexes.courseIndex, 1);
+        plan.schedule[activeData.yearIndex].terms[
+          activeData.termIndex
+        ].courses.splice(activeData.courseIndex, 1);
 
         plan.schedule[overYearIndex].terms[overTermIndex].courses.splice(
           newIndex,
@@ -138,49 +134,19 @@ export const usePlanStore = create<State & Actions>()(
   })),
 );
 
-function getTermIndex(termDndId: string, schedule: DndYear[]) {
-  const yearIndex = schedule.findIndex(year =>
-    year.terms.some(term => term.dndId === termDndId),
-  );
-  const termIndex = schedule[yearIndex].terms.findIndex(
-    term => term.dndId === termDndId,
-  );
+export type DndData = DndCourseData | DndTermData;
 
-  return {
-    yearIndex,
-    termIndex,
-  };
-}
-
-function getCourseIndex(courseDndId: string, schedule: DndYear[]) {
-  const yearIndex = schedule.findIndex(year =>
-    year.terms.some(term =>
-      term.courses.some(course => course.dndId === courseDndId),
-    ),
-  );
-  const termIndex = schedule[yearIndex].terms.findIndex(term =>
-    term.courses.some(course => course.dndId === courseDndId),
-  );
-
-  const courseIndex = schedule[yearIndex].terms[termIndex].courses.findIndex(
-    course => course.dndId === courseDndId,
-  );
-
-  return {
-    yearIndex,
-    termIndex,
-    courseIndex,
-  };
-}
-
-type DndData = DndCourseData | DndTermData;
-
-type DndCourseData = {
+export type DndCourseData = {
   type: "course";
   dndId: string;
+  yearIndex: number;
+  termIndex: number;
+  courseIndex: number;
 };
 
-type DndTermData = {
+export type DndTermData = {
   type: "term";
   dndId: string;
+  yearIndex: number;
+  termIndex: number;
 };

@@ -26,10 +26,7 @@ function Year({ dndId, yearIndex }: { dndId: string; yearIndex: number }) {
   const year = usePlanStore(useShallow(state => state.schedule[yearIndex]));
 
   return (
-    <AccordionItem
-      value={`year-${yearIndex + 1}`}
-      key={`year-${yearIndex + 1}`}
-    >
+    <AccordionItem value={`year-${dndId}`}>
       <AccordionTrigger className="px-2 py-4 font-bold text-base">{`Year ${
         yearIndex + 1
       }`}</AccordionTrigger>

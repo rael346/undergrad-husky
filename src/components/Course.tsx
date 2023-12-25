@@ -34,6 +34,9 @@ function SortableCourse({
     data: {
       type: "course",
       dndId: course.dndId,
+      yearIndex,
+      termIndex,
+      courseIndex,
     },
   });
 
@@ -72,7 +75,7 @@ function Course({
       <DraggableDots />
       <div className="flex flex-col justify-start">
         <div className="text-xs text-slate-600">
-          {course.subject + course.courseId}
+          {course.subject + " " + course.courseId}
         </div>
         <div className="text-wrap text-sm">{course.name}</div>
       </div>
