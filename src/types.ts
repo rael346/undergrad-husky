@@ -5,7 +5,7 @@ export type DndPlan = {
   schedule: DndYear[];
 };
 
-export type DndYear = DndRegularYear | DndSummerFullYear;
+export type DndYear = Dnd<{ terms: DndRegularYear | DndSummerFullYear }>;
 
 export type DndRegularYear = [
   DndTerm<TermSeason.FALL>,

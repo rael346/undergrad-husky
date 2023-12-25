@@ -32,7 +32,7 @@ export const usePlanStore = create<State & Actions>()(
       const activeIndexes = getCourseIndex(dndId, get().schedule);
 
       const activeCourse =
-        get().schedule[activeIndexes.yearIndex][activeIndexes.termIndex]
+        get().schedule[activeIndexes.yearIndex].terms[activeIndexes.termIndex]
           .courses[activeIndexes.courseIndex];
 
       set({ activeCourse });
@@ -65,15 +65,16 @@ export const usePlanStore = create<State & Actions>()(
       }
 
       const termCourses =
-        schedule[activeCourse.yearIndex][activeCourse.termIndex].courses;
+        schedule[activeCourse.yearIndex].terms[activeCourse.termIndex].courses;
 
       set(plan => {
-        plan.schedule[activeCourse.yearIndex][activeCourse.termIndex].courses =
-          arrayMove(
-            termCourses,
-            activeCourse.courseIndex,
-            overCourse.courseIndex,
-          );
+        plan.schedule[activeCourse.yearIndex].terms[
+          activeCourse.termIndex
+        ].courses = arrayMove(
+          termCourses,
+          activeCourse.courseIndex,
+          overCourse.courseIndex,
+        );
       });
     },
 
@@ -119,16 +120,15 @@ export const usePlanStore = create<State & Actions>()(
 
       const activeIndexes = getCourseIndex(activeData.dndId, schedule);
       const activeCourse =
-        schedule[activeIndexes.yearIndex][activeIndexes.termIndex].courses[
-          activeIndexes.courseIndex
-        ];
+        schedule[activeIndexes.yearIndex].terms[activeIndexes.termIndex]
+          .courses[activeIndexes.courseIndex];
 
       set(plan => {
-        plan.schedule[activeIndexes.yearIndex][
+        plan.schedule[activeIndexes.yearIndex].terms[
           activeIndexes.termIndex
         ].courses.splice(activeIndexes.courseIndex, 1);
 
-        plan.schedule[overYearIndex][overTermIndex].courses.splice(
+        plan.schedule[overYearIndex].terms[overTermIndex].courses.splice(
           newIndex,
           0,
           activeCourse,
@@ -140,9 +140,9 @@ export const usePlanStore = create<State & Actions>()(
 
 function getTermIndex(termDndId: string, schedule: DndYear[]) {
   const yearIndex = schedule.findIndex(year =>
-    year.some(term => term.dndId === termDndId),
+    year.terms.some(term => term.dndId === termDndId),
   );
-  const termIndex = schedule[yearIndex].findIndex(
+  const termIndex = schedule[yearIndex].terms.findIndex(
     term => term.dndId === termDndId,
   );
 
@@ -154,15 +154,15 @@ function getTermIndex(termDndId: string, schedule: DndYear[]) {
 
 function getCourseIndex(courseDndId: string, schedule: DndYear[]) {
   const yearIndex = schedule.findIndex(year =>
-    year.some(term =>
+    year.terms.some(term =>
       term.courses.some(course => course.dndId === courseDndId),
     ),
   );
-  const termIndex = schedule[yearIndex].findIndex(term =>
+  const termIndex = schedule[yearIndex].terms.findIndex(term =>
     term.courses.some(course => course.dndId === courseDndId),
   );
 
-  const courseIndex = schedule[yearIndex][termIndex].courses.findIndex(
+  const courseIndex = schedule[yearIndex].terms[termIndex].courses.findIndex(
     course => course.dndId === courseDndId,
   );
 

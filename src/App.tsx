@@ -11,9 +11,7 @@ import {
 } from "@dnd-kit/core";
 
 function App() {
-  const [activeCourse, setActiveCourse] = usePlanStore(
-    ({ activeCourse, setActiveCourse }) => [activeCourse, setActiveCourse],
-  );
+  const setActiveCourse = usePlanStore(state => state.setActiveCourse);
 
   const moveCourseToSameTerm = usePlanStore(
     state => state.moveCourseToSameTerm,
@@ -52,10 +50,18 @@ function App() {
       onDragEnd={handleDragEnd}
     >
       <Plan />
-      <DragOverlay>
-        {activeCourse && <Course course={activeCourse} isOverlay />}
-      </DragOverlay>
+      <Overlay />
     </DndContext>
+  );
+}
+
+function Overlay() {
+  const activeCourse = usePlanStore(state => state.activeCourse);
+
+  return (
+    <DragOverlay>
+      {activeCourse && <Course course={activeCourse} isOverlay />}
+    </DragOverlay>
   );
 }
 

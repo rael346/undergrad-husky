@@ -1,56 +1,70 @@
 import { SortableCourse } from "@/components/Course";
-import { DISPLAY_SEASON, DndTerm, TermSeason } from "@/types";
+import { usePlanStore } from "@/stores/planStore";
+import { DISPLAY_SEASON } from "@/types";
 import { useDroppable } from "@dnd-kit/core";
 import {
   SortableContext,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
+import { useShallow } from "zustand/react/shallow";
 
 function Term({
-  term,
+  termDndId,
+  yearIndex,
+  termIndex,
 }: {
-  term: DndTerm<
-    | TermSeason.FALL
-    | TermSeason.SPRING
-    | TermSeason.SUMMER_1
-    | TermSeason.SUMMER_2
-    | TermSeason.SUMMER_FULL
-  >;
+  termDndId: string;
+  yearIndex: number;
+  termIndex: number;
 }) {
-  return (
-    <DroppableContainer dndId={term.dndId}>
-      <div className="px-2 py-2 flex flex-col space-y-2">
-        <div className="font-semibold">{DISPLAY_SEASON[term.season]}</div>
-        <div className="flex flex-col space-y-2">
-          <SortableContext
-            items={term.courses.map(course => course.dndId)}
-            strategy={verticalListSortingStrategy}
-          >
-            {term.courses.map(course => (
-              <SortableCourse course={course} key={course.dndId} />
-            ))}
-          </SortableContext>
-        </div>
-      </div>
-    </DroppableContainer>
+  const term = usePlanStore(
+    useShallow(state => {
+      const term = state.schedule[yearIndex].terms[termIndex];
+
+      return {
+        season: term.season,
+        status: term.status,
+      };
+    }),
   );
-}
 
-type ContainerProps = {
-  children: React.ReactNode;
-  dndId: string;
-};
+  const courseDndIds = usePlanStore(
+    useShallow(state =>
+      state.schedule[yearIndex].terms[termIndex].courses.map(
+        course => course.dndId,
+      ),
+    ),
+  );
 
-function DroppableContainer({ children, dndId }: ContainerProps) {
   const { setNodeRef } = useDroppable({
-    id: dndId,
+    id: termDndId,
     data: {
       type: "term",
-      dndId,
+      dndId: termDndId,
     },
   });
 
-  return <div ref={setNodeRef}>{children}</div>;
+  return (
+    <div className="px-2 py-2 flex flex-col space-y-2" ref={setNodeRef}>
+      <div className="font-semibold">{DISPLAY_SEASON[term.season]}</div>
+      <div className="flex flex-col space-y-2">
+        <SortableContext
+          items={courseDndIds}
+          strategy={verticalListSortingStrategy}
+        >
+          {courseDndIds.map((courseDndId, courseIndex) => (
+            <SortableCourse
+              dndId={courseDndId}
+              yearIndex={yearIndex}
+              termIndex={termIndex}
+              courseIndex={courseIndex}
+              key={courseDndId}
+            />
+          ))}
+        </SortableContext>
+      </div>
+    </div>
+  );
 }
 
 export { Term };

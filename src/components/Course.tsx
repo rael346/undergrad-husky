@@ -1,10 +1,27 @@
 import { DraggableDots } from "@/components/icons";
 import { cn } from "@/lib/utils";
-import { Course, DndCourse } from "@/types";
+import { usePlanStore } from "@/stores/planStore";
+import { Course } from "@/types";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { useShallow } from "zustand/react/shallow";
 
-function SortableCourse({ course }: { course: DndCourse }) {
+function SortableCourse({
+  dndId,
+  yearIndex,
+  termIndex,
+  courseIndex,
+}: {
+  dndId: string;
+  yearIndex: number;
+  termIndex: number;
+  courseIndex: number;
+}) {
+  const course = usePlanStore(
+    useShallow(
+      state => state.schedule[yearIndex].terms[termIndex].courses[courseIndex],
+    ),
+  );
   const {
     attributes,
     listeners,
@@ -13,7 +30,7 @@ function SortableCourse({ course }: { course: DndCourse }) {
     transition,
     isDragging,
   } = useSortable({
-    id: course.dndId,
+    id: dndId,
     data: {
       type: "course",
       dndId: course.dndId,
