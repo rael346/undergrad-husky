@@ -1,6 +1,7 @@
 import { Course } from "@/components/Course";
 import { Header } from "@/components/Header";
 import { Plan } from "@/components/Plan";
+import { Sidebar } from "@/components/Sidebar";
 import { usePlanStore } from "@/stores/planStore";
 import { DndData } from "@/types";
 import {
@@ -86,8 +87,13 @@ function App() {
       onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
     >
-      <Header />
-      <Plan />
+      <div className="flex flex-col space-y-8">
+        <Header />
+        <div className="flex flex-row space-x-2">
+          <Sidebar />
+          <Plan />
+        </div>
+      </div>
       <Overlay />
     </DndContext>
   );

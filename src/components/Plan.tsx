@@ -1,11 +1,6 @@
-import { Term } from "@/components/Term";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import { Year } from "@/components/Year";
 import { usePlanStore } from "@/stores/planStore";
+import { Accordion } from "@radix-ui/react-accordion";
 import { useShallow } from "zustand/react/shallow";
 
 function Plan() {
@@ -16,38 +11,13 @@ function Plan() {
   return (
     <Accordion
       type="multiple"
-      className="flex flex-col justify-center"
+      className="flex flex-col justify-center w-full space-y-4 p-2"
       defaultValue={yearDndIds}
     >
       {yearDndIds.map((yearDndId, yearIndex) => (
         <Year dndId={yearDndId} yearIndex={yearIndex} key={yearDndId} />
       ))}
     </Accordion>
-  );
-}
-
-function Year({ dndId, yearIndex }: { dndId: string; yearIndex: number }) {
-  const year = usePlanStore(useShallow(state => state.schedule[yearIndex]));
-
-  return (
-    <AccordionItem value={dndId}>
-      <AccordionTrigger className="px-2 py-4 font-bold">{`Year ${
-        yearIndex + 1
-      }`}</AccordionTrigger>
-
-      <AccordionContent className="grid grid-cols-4 gap-x-2 min-h-16">
-        {year.terms
-          .map(term => term.dndId)
-          .map((termDndId, termIndex) => (
-            <Term
-              yearIndex={yearIndex}
-              termIndex={termIndex}
-              termDndId={termDndId}
-              key={termDndId}
-            />
-          ))}
-      </AccordionContent>
-    </AccordionItem>
   );
 }
 

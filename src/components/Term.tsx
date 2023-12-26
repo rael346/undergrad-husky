@@ -49,8 +49,13 @@ function Term({
   });
 
   return (
-    <div className="px-2 py-2 flex flex-col space-y-2" ref={setNodeRef}>
-      <div className="font-semibold">{DISPLAY_SEASON[term.season]}</div>
+    <div className="px-4 py-2 flex flex-col space-y-2" ref={setNodeRef}>
+      <div className="flex flex-row items-center space-x-2">
+        <span className="text-sm font-semibold">
+          {DISPLAY_SEASON[term.season]}
+        </span>
+        <span className="text-sm text-muted-foreground">0 credits</span>
+      </div>
       <div className="flex flex-col space-y-2">
         <SortableContext
           items={courseDndIds}

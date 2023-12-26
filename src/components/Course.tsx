@@ -68,7 +68,7 @@ function Course({
     <div
       className={cn(
         "w-full px-2 py-1 rounded-lg",
-        "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground",
+        "border border-input bg-background shadow hover:bg-accent hover:text-accent-foreground",
         "flex flex-row justify-start items-center space-x-2",
         "hover:scale-105 transition-transform cursor-pointer",
         isDragging && "opacity-50",
@@ -77,7 +77,9 @@ function Course({
     >
       <GripVerticalIcon className="w-4 h-4" />
       <div className="flex flex-col justify-start">
-        <div className="text-xs">{course.subject + " " + course.courseId}</div>
+        <div className="text-xs font-light">
+          {course.subject + " " + course.courseId}
+        </div>
         <div className="text-wrap text-sm">{course.name}</div>
       </div>
     </div>
