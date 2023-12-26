@@ -1,10 +1,10 @@
-import { DraggableDots } from "@/components/icons";
 import { cn } from "@/lib/utils";
 import { usePlanStore } from "@/stores/planStore";
 import { Course } from "@/types";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { useShallow } from "zustand/react/shallow";
+import { GripVerticalIcon } from "lucide-react";
 
 function SortableCourse({
   dndId,
@@ -67,18 +67,17 @@ function Course({
   return (
     <div
       className={cn(
-        "w-full px-2 py-1 rounded-md border border-solid shadow-sm",
+        "w-full px-2 py-1 rounded-lg",
+        "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground",
         "flex flex-row justify-start items-center space-x-2",
-        "bg-white hover:scale-105 transition-transform cursor-pointer",
+        "hover:scale-105 transition-transform cursor-pointer",
         isDragging && "opacity-50",
         isOverlay && "shadow-lg scale-105",
       )}
     >
-      <DraggableDots />
+      <GripVerticalIcon className="w-4 h-4" />
       <div className="flex flex-col justify-start">
-        <div className="text-xs text-slate-600">
-          {course.subject + " " + course.courseId}
-        </div>
+        <div className="text-xs">{course.subject + " " + course.courseId}</div>
         <div className="text-wrap text-sm">{course.name}</div>
       </div>
     </div>

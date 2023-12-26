@@ -1,4 +1,5 @@
 import { Course } from "@/components/Course";
+import { Header } from "@/components/Header";
 import { Plan } from "@/components/Plan";
 import { usePlanStore } from "@/stores/planStore";
 import { DndData } from "@/types";
@@ -85,6 +86,7 @@ function App() {
       onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
     >
+      <Header />
       <Plan />
       <Overlay />
     </DndContext>

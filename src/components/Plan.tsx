@@ -14,7 +14,11 @@ function Plan() {
   );
 
   return (
-    <Accordion type="multiple" className="flex flex-col justify-center">
+    <Accordion
+      type="multiple"
+      className="flex flex-col justify-center"
+      defaultValue={yearDndIds}
+    >
       {yearDndIds.map((yearDndId, yearIndex) => (
         <Year dndId={yearDndId} yearIndex={yearIndex} key={yearDndId} />
       ))}
@@ -26,12 +30,12 @@ function Year({ dndId, yearIndex }: { dndId: string; yearIndex: number }) {
   const year = usePlanStore(useShallow(state => state.schedule[yearIndex]));
 
   return (
-    <AccordionItem value={`year-${dndId}`}>
-      <AccordionTrigger className="px-2 py-4 font-bold text-base">{`Year ${
+    <AccordionItem value={dndId}>
+      <AccordionTrigger className="px-2 py-4 font-bold">{`Year ${
         yearIndex + 1
       }`}</AccordionTrigger>
 
-      <AccordionContent className="grid grid-cols-4 gap-x-2 bg-slate-100 min-h-64">
+      <AccordionContent className="grid grid-cols-4 gap-x-2 min-h-16">
         {year.terms
           .map(term => term.dndId)
           .map((termDndId, termIndex) => (

@@ -100,26 +100,14 @@ const YEAR_2: Year = [
     ],
   },
   {
-    status: TermStatus.CLASSES,
+    status: TermStatus.COOP,
     season: TermSeason.SPRING,
-    courses: [
-      {
-        name: "Experiential Learning",
-        courseId: 3945,
-        subject: "COOP",
-      },
-    ],
+    courses: [],
   },
   {
-    status: TermStatus.CLASSES,
+    status: TermStatus.COOP,
     season: TermSeason.SUMMER_1,
-    courses: [
-      {
-        name: "Experiential Learning",
-        courseId: 3945,
-        subject: "COOP",
-      },
-    ],
+    courses: [],
   },
   {
     status: TermStatus.CLASSES,
@@ -134,11 +122,137 @@ const YEAR_2: Year = [
   },
 ];
 
+const YEAR_3: Year = [
+  {
+    status: TermStatus.CLASSES,
+    season: TermSeason.FALL,
+    courses: [
+      {
+        name: "Theory of Computation",
+        subject: "CS",
+        courseId: 3800,
+      },
+      {
+        name: "Networks and Distributive System",
+        subject: "CS",
+        courseId: 3700,
+      },
+      {
+        name: "Natl Lang Proces for Robotics",
+        subject: "CS",
+        courseId: 4973,
+      },
+      {
+        name: "Intro to Math Reasoning",
+        subject: "MATH",
+        courseId: 1365,
+      },
+    ],
+  },
+  {
+    status: TermStatus.COOP,
+    season: TermSeason.SPRING,
+    courses: [],
+  },
+  {
+    status: TermStatus.COOP,
+    season: TermSeason.SUMMER_1,
+    courses: [
+      {
+        name: "AWDTechPro MultilingualWriter",
+        courseId: 3302,
+        subject: "ENGW",
+      },
+    ],
+  },
+  {
+    status: TermStatus.CLASSES,
+    season: TermSeason.SUMMER_2,
+    courses: [
+      {
+        name: "Machine Learning/Data Mining 1",
+        subject: "CY",
+        courseId: 4400,
+      },
+    ],
+  },
+];
+
+const YEAR_4: Year = [
+  {
+    status: TermStatus.CLASSES,
+    season: TermSeason.FALL,
+    courses: [
+      {
+        name: "Fundamentals of Software Engineer",
+        subject: "CS",
+        courseId: 4530,
+      },
+      {
+        name: "Algorithms Audit",
+        subject: "CS",
+        courseId: 4973,
+      },
+      {
+        name: "Fundamentals of Digital Design/Comp Org",
+        subject: "EECE",
+        courseId: 2322,
+      },
+      {
+        name: "Lab for EECE 2322",
+        subject: "EECE",
+        courseId: 2323,
+      },
+      {
+        name: "Foundations of Game Design",
+        subject: "GAME",
+        courseId: 2500,
+      },
+    ],
+  },
+  {
+    status: TermStatus.CLASSES,
+    season: TermSeason.SPRING,
+    courses: [
+      {
+        name: "Introduction to Mindfulness",
+        subject: "CAEP",
+        courseId: 1280,
+      },
+      {
+        name: "Mobile Application Development",
+        subject: "CS",
+        courseId: 4520,
+      },
+      {
+        name: "Computer Systems",
+        subject: "CS",
+        courseId: 5600,
+      },
+      {
+        name: "Foundations of Data Science",
+        subject: "DS",
+        courseId: 3000,
+      },
+    ],
+  },
+  {
+    status: TermStatus.CLASSES,
+    season: TermSeason.SUMMER_1,
+    courses: [],
+  },
+  {
+    status: TermStatus.INACTIVE,
+    season: TermSeason.SUMMER_2,
+    courses: [],
+  },
+];
+
 export const TEST_PLAN: Plan = {
   catalogYear: 2021,
   major: "Computer Science, BSCS",
   concentration: "Artificial Intelligence",
-  schedule: [YEAR_1, YEAR_2],
+  schedule: [YEAR_1, YEAR_2, YEAR_3, YEAR_4],
 };
 
 export const MY_PLAN = {
