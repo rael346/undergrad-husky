@@ -5,6 +5,31 @@ export type DndPlan = {
   schedule: DndYear[];
 };
 
+export type DndData = DndCourseData | DndTermData;
+
+export type DndCourseData = {
+  type: "course";
+  dndId: string;
+  location: DndCourseLocation;
+};
+
+export type DndTermData = {
+  type: "term";
+  dndId: string;
+  location: DndTermLocation;
+};
+
+export type DndCourseLocation = {
+  yearIndex: number;
+  termIndex: number;
+  courseIndex: number;
+};
+
+export type DndTermLocation = {
+  yearIndex: number;
+  termIndex: number;
+};
+
 export type DndYear = Dnd<{ terms: DndRegularYear | DndSummerFullYear }>;
 
 export type DndRegularYear = [

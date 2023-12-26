@@ -34,9 +34,11 @@ function SortableCourse({
     data: {
       type: "course",
       dndId: course.dndId,
-      yearIndex,
-      termIndex,
-      courseIndex,
+      location: {
+        yearIndex,
+        termIndex,
+        courseIndex,
+      },
     },
   });
 

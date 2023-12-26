@@ -41,8 +41,10 @@ function Term({
     data: {
       type: "term",
       dndId: termDndId,
-      yearIndex,
-      termIndex,
+      location: {
+        yearIndex,
+        termIndex,
+      },
     },
   });
 
