@@ -21,9 +21,9 @@ export function Year({
   const year = usePlanStore(useShallow(state => state.schedule[yearIndex]));
 
   return (
-    <AccordionItem value={dndId} className="border rounded-lg divide-y">
-      <AccordionHeader className="flex flex-row items-center justify-between px-4 py-2 bg-secondary text-secondary-foreground">
-        <AccordionTrigger className="group flex flex-1 flex-row items-center justify-start space-x-2">
+    <AccordionItem value={dndId} className="border rounded-lg divide-y shadow">
+      <AccordionHeader className="flex flex-row items-center justify-between px-4 py-2">
+        <AccordionTrigger className="group flex flex-1 flex-row items-center justify-start space-x-4">
           <ChevronDownIcon className="group-data-[state=open]:rotate-180 h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200" />
           <div className="flex flex-col items-start">
             <span className="text-base font-medium">{`Year ${
@@ -35,7 +35,7 @@ export function Year({
           </div>
         </AccordionTrigger>
         <Button
-          variant="outline"
+          variant="ghost"
           size="icon"
           className="h-8 w-8 hover:bg-destructive hover:text-destructive-foreground"
         >
