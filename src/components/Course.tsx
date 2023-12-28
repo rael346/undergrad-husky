@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { usePlanStore } from "@/stores/planStore";
-import { Course } from "@/types";
+import { Course, DndCourseLocation } from "@/types";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { useShallow } from "zustand/react/shallow";
@@ -8,18 +8,17 @@ import { GripVerticalIcon } from "lucide-react";
 
 function SortableCourse({
   dndId,
-  yearIndex,
-  termIndex,
-  courseIndex,
+  location,
 }: {
   dndId: string;
-  yearIndex: number;
-  termIndex: number;
-  courseIndex: number;
+  location: DndCourseLocation;
 }) {
   const course = usePlanStore(
     useShallow(
-      state => state.schedule[yearIndex].terms[termIndex].courses[courseIndex],
+      state =>
+        state.schedule[location.yearIndex].terms[location.termIndex].courses[
+          location.courseIndex
+        ],
     ),
   );
   const {
@@ -33,12 +32,8 @@ function SortableCourse({
     id: dndId,
     data: {
       type: "course",
-      dndId: course.dndId,
-      location: {
-        yearIndex,
-        termIndex,
-        courseIndex,
-      },
+      dndId,
+      location,
     },
   });
 

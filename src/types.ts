@@ -30,6 +30,10 @@ export type DndTermLocation = {
   termIndex: number;
 };
 
+export type DndYearLocation = {
+  yearIndex: number;
+};
+
 export type DndYear = Dnd<{ terms: DndRegularYear | DndSummerFullYear }>;
 
 export type DndRegularYear = [

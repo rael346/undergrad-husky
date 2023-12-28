@@ -1,6 +1,13 @@
 import { TEST_PLAN } from "@/constants";
 import { preparePlanForDnd } from "@/lib/utils";
-import { DndCourse, DndCourseLocation, DndData, DndPlan } from "@/types";
+import {
+  DndCourse,
+  DndCourseLocation,
+  DndData,
+  DndPlan,
+  DndTermLocation,
+  DndYearLocation,
+} from "@/types";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
@@ -10,6 +17,8 @@ type Actions = {
     activeLocation: DndCourseLocation,
     overLocation: DndCourseLocation,
   ) => void;
+  getTermDndIdsFromYear: (location: DndYearLocation) => string[];
+  getCourseDndIdsFromTerm: (location: DndTermLocation) => string[];
 };
 
 type State = DndPlan & {
@@ -21,6 +30,16 @@ const initialState: DndPlan = preparePlanForDnd(TEST_PLAN);
 export const usePlanStore = create<State & Actions>()(
   immer((set, get) => ({
     ...initialState,
+
+    getTermDndIdsFromYear(location) {
+      return get().schedule[location.yearIndex].terms.map(term => term.dndId);
+    },
+
+    getCourseDndIdsFromTerm(location) {
+      return get().schedule[location.yearIndex].terms[
+        location.termIndex
+      ].courses.map(course => course.dndId);
+    },
 
     active: null,
     setActive(activeData) {

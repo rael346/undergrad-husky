@@ -1,6 +1,6 @@
 import { SortableCourse } from "@/components/Course";
 import { usePlanStore } from "@/stores/planStore";
-import { DISPLAY_SEASON } from "@/types";
+import { DISPLAY_SEASON, DndTermLocation } from "@/types";
 import { useDroppable } from "@dnd-kit/core";
 import {
   SortableContext,
@@ -10,16 +10,14 @@ import { useShallow } from "zustand/react/shallow";
 
 function Term({
   termDndId,
-  yearIndex,
-  termIndex,
+  location,
 }: {
   termDndId: string;
-  yearIndex: number;
-  termIndex: number;
+  location: DndTermLocation;
 }) {
   const term = usePlanStore(
     useShallow(state => {
-      const term = state.schedule[yearIndex].terms[termIndex];
+      const term = state.schedule[location.yearIndex].terms[location.termIndex];
 
       return {
         season: term.season,
@@ -29,11 +27,7 @@ function Term({
   );
 
   const courseDndIds = usePlanStore(
-    useShallow(state =>
-      state.schedule[yearIndex].terms[termIndex].courses.map(
-        course => course.dndId,
-      ),
-    ),
+    useShallow(state => state.getCourseDndIdsFromTerm(location)),
   );
 
   const { setNodeRef } = useDroppable({
@@ -41,10 +35,7 @@ function Term({
     data: {
       type: "term",
       dndId: termDndId,
-      location: {
-        yearIndex,
-        termIndex,
-      },
+      location,
     },
   });
 
@@ -64,9 +55,7 @@ function Term({
           {courseDndIds.map((courseDndId, courseIndex) => (
             <SortableCourse
               dndId={courseDndId}
-              yearIndex={yearIndex}
-              termIndex={termIndex}
-              courseIndex={courseIndex}
+              location={{ ...location, courseIndex }}
               key={courseDndId}
             />
           ))}

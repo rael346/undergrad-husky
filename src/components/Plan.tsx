@@ -11,11 +11,11 @@ function Plan() {
   return (
     <Accordion
       type="multiple"
-      className="flex flex-col justify-center w-full space-y-4 p-2"
+      className="flex flex-col justify-center w-full space-y-4 px-8"
       defaultValue={yearDndIds}
     >
       {yearDndIds.map((yearDndId, yearIndex) => (
-        <Year dndId={yearDndId} yearIndex={yearIndex} key={yearDndId} />
+        <Year dndId={yearDndId} location={{ yearIndex }} key={yearDndId} />
       ))}
     </Accordion>
   );
