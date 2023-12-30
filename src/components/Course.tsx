@@ -21,6 +21,7 @@ function SortableCourse({
         ],
     ),
   );
+
   const {
     attributes,
     listeners,
@@ -59,6 +60,10 @@ function Course({
   isOverlay?: boolean;
   isDragging?: boolean;
 }) {
+  const courseMetadata = usePlanStore(state =>
+    state.getCourseMetadata(course.subject + course.classId),
+  );
+
   return (
     <div
       className={cn(
@@ -73,9 +78,9 @@ function Course({
       <GripVerticalIcon className="w-4 h-4" />
       <div className="flex flex-col justify-start">
         <div className="text-xs text-muted-foreground">
-          {course.subject + " " + course.courseId}
+          {course.subject + " " + course.classId}
         </div>
-        <div className="text-wrap text-sm">{course.name}</div>
+        <div className="text-wrap text-sm">{courseMetadata?.name}</div>
       </div>
     </div>
   );

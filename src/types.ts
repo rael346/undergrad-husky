@@ -68,25 +68,12 @@ export type Plan = {
   schedule: Year[];
 };
 
-export type Year = RegularYear | SummerFullYear;
+export type Year = Term[];
 
-export type RegularYear = [
-  Term<TermSeason.FALL>,
-  Term<TermSeason.SPRING>,
-  Term<TermSeason.SUMMER_1>,
-  Term<TermSeason.SUMMER_2>,
-];
-
-export type SummerFullYear = [
-  Term<TermSeason.FALL>,
-  Term<TermSeason.SPRING>,
-  Term<TermSeason.SUMMER_FULL>,
-];
-
-export type Term<T extends TermSeason> = {
+export type Term = {
   courses: Course[];
   status: TermStatus;
-  season: T;
+  season: TermSeason;
 };
 
 export enum TermStatus {
@@ -120,12 +107,42 @@ export const DISPLAY_SEASON = {
 };
 
 export type Course = {
-  name: string;
-  courseId: number;
+  classId: string;
   subject: string;
 };
 
-export type CourseMetaData = {
-  numCreditsMin: number;
-  numCreditsMax: number;
+export type CourseMetadata = {
+  name: string;
+  subject: string;
+  classId: string;
+  minCredits: number;
+  maxCredits: number;
+  prereqs: CourseRequisite;
+  coreqs: CourseRequisite;
+  termId: string;
+};
+
+export type TermMetadata = {
+  season: TermSeason;
+  status: TermStatus;
+  credits: number;
+};
+
+export type YearMetadata = {
+  credits: number;
+};
+
+export type CourseRequisite =
+  | CourseAndRequisite
+  | CourseOrRequisite
+  | { subject: string; classId: string };
+
+export type CourseAndRequisite = {
+  type: "and";
+  values: CourseRequisite[];
+};
+
+export type CourseOrRequisite = {
+  type: "or";
+  values: CourseRequisite[];
 };

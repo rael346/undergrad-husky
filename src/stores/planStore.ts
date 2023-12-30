@@ -1,6 +1,7 @@
 import { TEST_PLAN } from "@/constants";
 import { preparePlanForDnd } from "@/lib/utils";
 import {
+  CourseMetadata,
   DndCourse,
   DndCourseLocation,
   DndData,
@@ -19,17 +20,18 @@ type Actions = {
   ) => void;
   getTermDndIdsFromYear: (location: DndYearLocation) => string[];
   getCourseDndIdsFromTerm: (location: DndTermLocation) => string[];
+  getCourseMetadata: (dndId: string) => CourseMetadata | undefined;
 };
 
 type State = DndPlan & {
   active: DndCourse | null;
 };
 
-const initialState: DndPlan = preparePlanForDnd(TEST_PLAN);
+const { dndPlan, courseMap } = await preparePlanForDnd(TEST_PLAN);
 
 export const usePlanStore = create<State & Actions>()(
   immer((set, get) => ({
-    ...initialState,
+    ...dndPlan,
 
     getTermDndIdsFromYear(location) {
       return get().schedule[location.yearIndex].terms.map(term => term.dndId);
@@ -39,6 +41,10 @@ export const usePlanStore = create<State & Actions>()(
       return get().schedule[location.yearIndex].terms[
         location.termIndex
       ].courses.map(course => course.dndId);
+    },
+
+    getCourseMetadata(dndId) {
+      return courseMap.get(dndId.split("-")[0]);
     },
 
     active: null,

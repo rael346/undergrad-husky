@@ -6,24 +6,20 @@ const YEAR_1: Year = [
     season: TermSeason.FALL,
     courses: [
       {
-        name: "First Year Seminar",
         subject: "CS",
-        courseId: 1200,
+        classId: "1200",
       },
       {
-        name: "Fundamentals of Computer Science 1",
         subject: "CS",
-        courseId: 2500,
+        classId: "2500",
       },
       {
-        name: "Discrete Structures",
         subject: "CS",
-        courseId: 1800,
+        classId: "1800",
       },
       {
-        name: "Lab for CS 2500",
         subject: "CS",
-        courseId: 2501,
+        classId: "2501",
       },
     ],
   },
@@ -32,19 +28,16 @@ const YEAR_1: Year = [
     season: TermSeason.SPRING,
     courses: [
       {
-        name: "Fundamentals of Computer Science 2",
         subject: "CS",
-        courseId: 2510,
+        classId: "2510",
       },
       {
-        name: "Mathematics of Data Models",
         subject: "CS",
-        courseId: 2810,
+        classId: "2810",
       },
       {
-        name: "Lab for CS 2510",
         subject: "CS",
-        courseId: 2511,
+        classId: "2511",
       },
     ],
   },
@@ -53,14 +46,12 @@ const YEAR_1: Year = [
     season: TermSeason.SUMMER_1,
     courses: [
       {
-        name: "Object-Oriented Design",
         subject: "CS",
-        courseId: 3500,
+        classId: "3500",
       },
       {
-        name: "Lab for CS 3500",
         subject: "CS",
-        courseId: 3501,
+        classId: "3501",
       },
     ],
   },
@@ -69,13 +60,11 @@ const YEAR_1: Year = [
     season: TermSeason.SUMMER_2,
     courses: [
       {
-        name: "Algorithms and Data",
         subject: "CS",
-        courseId: 3000,
+        classId: "3000",
       },
       {
-        name: "Recitation for CS 3000",
-        courseId: 3001,
+        classId: "3001",
         subject: "CS",
       },
     ],
@@ -88,14 +77,12 @@ const YEAR_2: Year = [
     season: TermSeason.FALL,
     courses: [
       {
-        name: "Artificial Intelligence",
         subject: "CS",
-        courseId: 4100,
+        classId: "4100",
       },
       {
-        name: "Probability and Statistics",
         subject: "MATH",
-        courseId: 3081,
+        classId: "3081",
       },
     ],
   },
@@ -114,9 +101,8 @@ const YEAR_2: Year = [
     season: TermSeason.SUMMER_2,
     courses: [
       {
-        name: "Foundations of Cybersecurity",
         subject: "CY",
-        courseId: 2550,
+        classId: "2550",
       },
     ],
   },
@@ -128,24 +114,20 @@ const YEAR_3: Year = [
     season: TermSeason.FALL,
     courses: [
       {
-        name: "Theory of Computation",
         subject: "CS",
-        courseId: 3800,
+        classId: "3800",
       },
       {
-        name: "Networks and Distributive System",
         subject: "CS",
-        courseId: 3700,
+        classId: "3700",
       },
       {
-        name: "Natl Lang Proces for Robotics",
         subject: "CS",
-        courseId: 4973,
+        classId: "4973",
       },
       {
-        name: "Intro to Math Reasoning",
         subject: "MATH",
-        courseId: 1365,
+        classId: "1365",
       },
     ],
   },
@@ -159,8 +141,7 @@ const YEAR_3: Year = [
     season: TermSeason.SUMMER_1,
     courses: [
       {
-        name: "AWDTechPro MultilingualWriter",
-        courseId: 3302,
+        classId: "3302",
         subject: "ENGW",
       },
     ],
@@ -170,9 +151,8 @@ const YEAR_3: Year = [
     season: TermSeason.SUMMER_2,
     courses: [
       {
-        name: "Machine Learning/Data Mining 1",
-        subject: "CY",
-        courseId: 4400,
+        subject: "DS",
+        classId: "4400",
       },
     ],
   },
@@ -184,29 +164,24 @@ const YEAR_4: Year = [
     season: TermSeason.FALL,
     courses: [
       {
-        name: "Fundamentals of Software Engineer",
         subject: "CS",
-        courseId: 4530,
+        classId: "4530",
       },
       {
-        name: "Algorithms Audit",
         subject: "CS",
-        courseId: 4973,
+        classId: "4973",
       },
       {
-        name: "Fundamentals of Digital Design/Comp Org",
         subject: "EECE",
-        courseId: 2322,
+        classId: "2322",
       },
       {
-        name: "Lab for EECE 2322",
         subject: "EECE",
-        courseId: 2323,
+        classId: "2323",
       },
       {
-        name: "Foundations of Game Design",
         subject: "GAME",
-        courseId: 2500,
+        classId: "2500",
       },
     ],
   },
@@ -215,24 +190,20 @@ const YEAR_4: Year = [
     season: TermSeason.SPRING,
     courses: [
       {
-        name: "Introduction to Mindfulness",
         subject: "CAEP",
-        courseId: 1280,
+        classId: "1280",
       },
       {
-        name: "Mobile Application Development",
         subject: "CS",
-        courseId: 4520,
+        classId: "4520",
       },
       {
-        name: "Computer Systems",
         subject: "CS",
-        courseId: 5600,
+        classId: "5600",
       },
       {
-        name: "Foundations of Data Science",
         subject: "DS",
-        courseId: 3000,
+        classId: "3000",
       },
     ],
   },
