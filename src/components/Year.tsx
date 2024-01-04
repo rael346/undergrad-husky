@@ -23,6 +23,8 @@ export function Year({
     useShallow(state => state.getTermDndIdsFromYear(location)),
   );
 
+  const deleteYear = usePlanStore(state => state.deleteYear);
+
   return (
     <AccordionItem
       value={dndId}
@@ -41,6 +43,7 @@ export function Year({
           variant="ghost"
           size="icon"
           className="h-8 w-8 hover:bg-destructive hover:text-destructive-foreground"
+          onClick={() => deleteYear(location)}
         >
           <Trash2 className="h-4 w-4" />
         </Button>

@@ -15,8 +15,13 @@ export function cn(...inputs: ClassValue[]) {
 
 export async function preparePlanForDnd(
   plan: Plan,
-): Promise<{ dndPlan: DndPlan; courseMap: Map<string, CourseMetadata> }> {
+): Promise<{
+  dndPlan: DndPlan;
+  courseMap: Map<string, CourseMetadata>;
+  yearCount: number;
+}> {
   const courseCount = new Map<string, number>();
+  const yearCount = plan.schedule.length;
   const input = plan.schedule
     .flat()
     .flatMap(term => term.courses)
@@ -103,5 +108,6 @@ export async function preparePlanForDnd(
         courseMetadata.latestOccurrence,
       ]),
     ),
+    yearCount,
   };
 }

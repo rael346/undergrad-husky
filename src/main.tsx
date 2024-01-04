@@ -30,13 +30,15 @@ const indexRoute = new Route({
     );
   },
   loader: async () => {
-    const { dndPlan, courseMap } = await preparePlanForDnd(TEST_PLAN);
+    const { dndPlan, courseMap, yearCount } =
+      await preparePlanForDnd(TEST_PLAN);
     usePlanStore.setState({
       catalogYear: dndPlan.catalogYear,
       major: dndPlan.major,
       concentration: dndPlan.concentration,
       schedule: dndPlan.schedule,
       courseMap: courseMap,
+      yearCount,
     });
   },
 });

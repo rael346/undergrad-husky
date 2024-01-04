@@ -10,6 +10,8 @@ function Plan() {
     useShallow(state => state.schedule.map(year => year.dndId)),
   );
 
+  const addYear = usePlanStore(state => state.addYear);
+
   return (
     <div className="flex flex-col space-y-4 w-full pr-8">
       <Accordion
@@ -22,7 +24,11 @@ function Plan() {
         ))}
       </Accordion>
 
-      <Button variant="ghost" className="justify-start max-w-fit">
+      <Button
+        variant="ghost"
+        className="justify-start max-w-fit"
+        onClick={() => addYear()}
+      >
         <PlusIcon />
         <span className="pl-2">Add Year</span>
       </Button>

@@ -3,10 +3,7 @@ import { Button } from "@/components/ui/button";
 import { usePlanStore } from "@/stores/planStore";
 import { DISPLAY_SEASON, DndTermLocation } from "@/types";
 import { useDroppable } from "@dnd-kit/core";
-import {
-  SortableContext,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
+import { SortableContext } from "@dnd-kit/sortable";
 import { PlusIcon } from "@radix-ui/react-icons";
 import { useShallow } from "zustand/react/shallow";
 
@@ -55,10 +52,7 @@ function Term({
         </div>
 
         <div className="flex flex-col space-y-2">
-          <SortableContext
-            items={courseDndIds}
-            strategy={verticalListSortingStrategy}
-          >
+          <SortableContext items={courseDndIds}>
             {courseDndIds.map((courseDndId, courseIndex) => (
               <SortableCourse
                 dndId={courseDndId}
