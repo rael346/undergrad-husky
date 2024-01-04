@@ -1,5 +1,3 @@
-import { TEST_PLAN } from "@/constants";
-import { preparePlanForDnd } from "@/lib/utils";
 import {
   CourseMetadata,
   DndCourse,
@@ -25,13 +23,16 @@ type Actions = {
 
 type State = DndPlan & {
   active: DndCourse | null;
+  courseMap: Map<string, CourseMetadata>;
 };
-
-const { dndPlan, courseMap } = await preparePlanForDnd(TEST_PLAN);
 
 export const usePlanStore = create<State & Actions>()(
   immer((set, get) => ({
-    ...dndPlan,
+    catalogYear: 0,
+    major: "",
+    concentration: "",
+    schedule: [],
+    courseMap: new Map(),
 
     getTermDndIdsFromYear(location) {
       return get().schedule[location.yearIndex].terms.map(term => term.dndId);
@@ -44,7 +45,7 @@ export const usePlanStore = create<State & Actions>()(
     },
 
     getCourseMetadata(dndId) {
-      return courseMap.get(dndId.split("-")[0]);
+      return get().courseMap.get(dndId.split("-")[0]);
     },
 
     active: null,

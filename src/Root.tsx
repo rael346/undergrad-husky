@@ -1,7 +1,6 @@
 import { Course } from "@/components/Course";
 import { Header } from "@/components/Header";
-import { Plan } from "@/components/Plan";
-import { Sidebar } from "@/components/Sidebar";
+import { ThemeProvider } from "@/components/ThemeProvider";
 import { usePlanStore } from "@/stores/planStore";
 import { DndData } from "@/types";
 import {
@@ -12,8 +11,9 @@ import {
   DragStartEvent,
   closestCorners,
 } from "@dnd-kit/core";
+import { Outlet } from "@tanstack/react-router";
 
-function App() {
+export function Root() {
   const setActive = usePlanStore(state => state.setActive);
   const moveCourse = usePlanStore(state => state.moveCourse);
 
@@ -81,21 +81,20 @@ function App() {
   };
 
   return (
-    <DndContext
-      collisionDetection={closestCorners}
-      onDragStart={handleDragStart}
-      onDragOver={handleDragOver}
-      onDragEnd={handleDragEnd}
-    >
-      <div className="flex flex-col space-y-8">
-        <Header />
-        <div className="flex flex-row space-x-2">
-          <Sidebar />
-          <Plan />
+    <ThemeProvider defaultTheme="dark" storageKey="ui-theme">
+      <DndContext
+        collisionDetection={closestCorners}
+        onDragStart={handleDragStart}
+        onDragOver={handleDragOver}
+        onDragEnd={handleDragEnd}
+      >
+        <div className="flex flex-col space-y-8">
+          <Header />
+          <Outlet />
         </div>
-      </div>
-      <Overlay />
-    </DndContext>
+        <Overlay />
+      </DndContext>
+    </ThemeProvider>
   );
 }
 
@@ -108,5 +107,3 @@ function Overlay() {
     </DragOverlay>
   );
 }
-
-export default App;

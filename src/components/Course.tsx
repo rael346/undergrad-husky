@@ -60,8 +60,10 @@ function Course({
   isOverlay?: boolean;
   isDragging?: boolean;
 }) {
-  const courseMetadata = usePlanStore(state =>
-    state.getCourseMetadata(course.subject + course.classId),
+  const courseMetadata = usePlanStore(
+    useShallow(state =>
+      state.getCourseMetadata(course.subject + course.classId),
+    ),
   );
 
   return (
